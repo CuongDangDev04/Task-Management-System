@@ -20,29 +20,32 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $result = $this->authService->register($request->validated());
+        $user = $this->authService->register($request->validated());
 
         return response()->json([
-            'user'         => new UserResource($result['user']),
-            'access_token' => $result['token'],
-            'token_type'   => 'Bearer',
+            'message' => 'Đăng ký thành công',
+            'user'    => new UserResource($user),
         ], 201);
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $result = $this->authService->login($request->validated());
+        $user = $this->authService->login($request->validated());
 
         return response()->json([
-            'user'         => new UserResource($result['user']),
-            'access_token' => $result['token'],
-            'token_type'   => 'Bearer',
+            'message' => 'Đăng nhập thành công',
+            'user'    => new UserResource($user),
         ]);
     }
 
-    public function logout(Request $request): JsonResponse
+    public function me(Request $request): JsonResponse
     {
-        $this->authService->logout($request->user());
+        return response()->json(new UserResource($request->user()));
+    }
+
+    public function logout(): JsonResponse
+    {
+        $this->authService->logout();
 
         return response()->json([
             'message' => 'Đăng xuất thành công',

@@ -8,7 +8,7 @@ node_modules/
 client/node_modules/
 client/dist/
 client/.vite/
-gi!client/.env.example
+!client/.env.example
 
 
 # PHP / Laravel backend

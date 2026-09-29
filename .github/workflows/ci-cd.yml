@@ -45,6 +45,8 @@ jobs:
         working-directory: ./server
         run: |
           cp .env.example .env
+          mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
+          chmod -R 777 bootstrap/cache storage storage/logs
           php artisan key:generate --force
           php artisan config:clear
           php artisan route:clear

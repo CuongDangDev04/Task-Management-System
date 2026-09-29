@@ -82,15 +82,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
+      - name: Deploy to VPS via SSH Native
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s\n" "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no "$USER@$HOST" << 'EOF'
+            set -e
             cd /root/Task-Management-System
             docker compose pull
             docker compose up -d --remove-orphans
             docker compose ps
+          EOF

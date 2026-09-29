@@ -2,7 +2,6 @@
 import type { AppRoute } from '../../types/routesType';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import TaskPage from '@/modules/tasks/pages/TaskPage';
 
 export const authRoutes: AppRoute[] = [
   {

@@ -8,11 +8,14 @@ node_modules/
 client/node_modules/
 client/dist/
 client/.vite/
+!client/.env.example
+
 
 # PHP / Laravel backend
 server/vendor/
 server/.env
 server/.env.*
+!server/.env.example
 server/storage/*.key
 server/storage/logs/
 server/storage/framework/cache/

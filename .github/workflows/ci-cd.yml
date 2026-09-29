@@ -83,7 +83,7 @@ jobs:
 
     steps:
       - name: Debug Secrets Existence
-          run: |
+        run: |
             echo "Kiểm tra sự tồn tại của Secrets:"
             [ -n "${{ secrets.VPS_HOST }}" ] && echo "VPS_HOST: OK" || echo "VPS_HOST: RỖNG (MISSING)"
             [ -n "${{ secrets.VPS_USER }}" ] && echo "VPS_USER: OK" || echo "VPS_USER: RỖNG (MISSING)"

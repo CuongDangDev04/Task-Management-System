@@ -4,10 +4,11 @@ import { ProtectedRoute, GuestRoute } from './RouteGuards';
 
 import type { AppRoute } from '@/types/routesType';
 import { authRoutes } from '@/modules/auth/routes';
-
+import { taskRoutes } from '@/modules/tasks/routes';
 // 1. Mảng tổng hợp toàn bộ routes của toàn hệ thống
 export const appRoutesConfig: AppRoute[] = [
   ...authRoutes,
+  ...taskRoutes
 ];
 
 interface AppRoutesProps {

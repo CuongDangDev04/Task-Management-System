@@ -1,8 +1,8 @@
 // src/modules/auth/routes.tsx
-import { Dashboard } from '../../components/Dashboard';
 import type { AppRoute } from '../../types/routesType';
-import  LoginPage  from './pages/LoginPage';
-import  RegisterPage  from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import TaskPage from '@/modules/tasks/pages/TaskPage';
 
 export const authRoutes: AppRoute[] = [
   {
@@ -16,11 +16,6 @@ export const authRoutes: AppRoute[] = [
     element: <RegisterPage />,
     isProtected: false,
     title: 'Đăng ký tài khoản',
-  },
-  {
-    path: '/tasks',
-    element: <Dashboard />,
-    isProtected: true, 
-    title: 'Dashboard công việc',
-  },
+  }
+  
 ];

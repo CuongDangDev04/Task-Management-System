@@ -1,6 +1,5 @@
-// src/store/useAuthStore.ts
 import { create } from 'zustand';
-import type { LoginPayload, RegisterPayload, User } from '../modules/auth/types/auth';
+import type { LoginPayload, RegisterPayload, User } from '../modules/auth/types/authType';
 import { authApi } from '@/modules/auth/api/authApi';
 
 interface AuthState {

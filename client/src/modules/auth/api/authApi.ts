@@ -1,5 +1,5 @@
 import axiosClient from '@/api/axiosClient';
-import type { LoginPayload, RegisterPayload, User } from '@/modules/auth/types/auth';
+import type { LoginPayload, RegisterPayload, User } from '@/modules/auth/types/authType';
 
 export const authApi = {
   // 1. Bước bắt buộc trước khi Login/Register: Lấy CSRF Cookie

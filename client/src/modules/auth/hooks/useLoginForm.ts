@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useAuthStore } from '@/stores/useAuthStore';
-import type { LaravelValidationError } from '@/modules/auth/types/auth';
+import type { LaravelValidationError } from '@/modules/auth/types/authType';
 
 export const useLoginForm = () => {
   const [email, setEmail] = useState('');

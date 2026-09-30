@@ -23,8 +23,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-violet-100">New journey</p>
-            <h2 className="text-4xl font-bold leading-tight">Bắt đầu với một hệ thống rõ ràng hơn.</h2>
+            <h2 className="text-4xl font-bold leading-tight">Bắt đầu với hệ thống quản lí công việc.</h2>
           </div>
 
           <div className="space-y-4 text-sm text-violet-50">
@@ -32,10 +31,7 @@ export default function RegisterPage() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-bold">✓</span>
               Tạo tài khoản nhanh chóng
             </div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-bold">✓</span>
-              Sắp xếp task dễ dàng hơn
-            </div>
+           
           </div>
         </div>
 

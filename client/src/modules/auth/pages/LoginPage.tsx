@@ -24,7 +24,6 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-indigo-100">Smart planning</p>
             <h2 className="text-4xl font-bold leading-tight">Quản lý việc làm rõ ràng hơn.</h2>
           </div>
 
@@ -33,10 +32,7 @@ export default function LoginPage() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-bold">✓</span>
               Theo dõi tiến độ nhanh chóng
             </div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-bold">✓</span>
-              Tập trung vào việc quan trọng
-            </div>
+          
           </div>
         </div>
 

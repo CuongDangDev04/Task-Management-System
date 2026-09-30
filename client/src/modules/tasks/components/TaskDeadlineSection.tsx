@@ -51,7 +51,7 @@ const DeadlineItemCard = ({ task, badgeText, badgeClass, priorityClass, priority
     onClick={() => onView?.(task)}
     className="w-full rounded-lg border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-3 text-left shadow-sm transition hover:border-sky-200 hover:bg-sky-50/30"
   >
-    <div className="mb-1.5 flex items-start justify-between gap-2">
+    <div className="cursor-pointer mb-1.5 flex items-start justify-between gap-2">
       <p className="line-clamp-2 text-sm font-semibold text-gray-800">{task.title}</p>
       <span className={`rounded-full border bg-white px-1.5 py-0.5 text-[9px] font-medium ${badgeClass}`}>
         {badgeText}

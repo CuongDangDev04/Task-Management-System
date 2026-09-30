@@ -45,13 +45,7 @@ export const AppSidebar = ({ tasksCount }: TaskSidebarProps) => {
           })}
         </nav>
 
-        <div className="mt-auto rounded-2xl bg-sky-50 p-4 ring-1 ring-sky-100">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-600">Tổng quan</p>
-          <div className="mt-3 flex items-end justify-between">
-            <span className="text-3xl font-bold text-slate-800">{tasksCount}</span>
-            <span className="text-xs font-medium text-slate-500">Công việc</span>
-          </div>
-        </div>
+      
       </div>
     </aside>
   );

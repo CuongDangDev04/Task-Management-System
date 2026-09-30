@@ -14,8 +14,10 @@ return [
      * Phải điền chính xác Origin của Frontend (kèm cả http:// và port)
      */
     'allowed_origins' => [
-        'http://localhost:5173', // Port của Vite
-        'http://localhost:3000', // Port của React / Next.js
+        'http://localhost:5173',  
+        'http://localhost:3000',  
+        'https://blueskydev04.id.vn',      
+        'https://www.blueskydev04.id.vn',
     ],
 
     'allowed_origins_patterns' => [],

@@ -8,7 +8,6 @@ type TaskHeaderProps = {
 };
 
 export const AppHeader = ({ userName, onLogout }: TaskHeaderProps) => {
-  const initial = userName?.charAt(0)?.toUpperCase() || 'U';
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-xl">

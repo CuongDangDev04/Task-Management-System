@@ -32,9 +32,7 @@ export const AppHeader = ({ userName, onLogout }: TaskHeaderProps) => {
             to="/profile"
             className="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-700">
-              {initial}
-            </div>
+           
 
             <div className="hidden text-left sm:block">
               <p className="text-sm font-semibold text-slate-800">{userName || 'User'}</p>
@@ -45,7 +43,7 @@ export const AppHeader = ({ userName, onLogout }: TaskHeaderProps) => {
           <button
             type="button"
             onClick={onLogout}
-            className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100"
           >
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="h-3.5 w-3.5" />
             Đăng xuất

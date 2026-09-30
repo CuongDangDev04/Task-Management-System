@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/health-check', [SystemController::class, 'healthCheck']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);

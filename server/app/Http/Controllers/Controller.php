@@ -7,6 +7,10 @@ if (!defined('L5_SWAGGER_CONST_HOST')) {
     $appUrl = env('APP_URL', 'http://localhost:8000');
     define('L5_SWAGGER_CONST_HOST', rtrim($appUrl, '/') . '/api');
 }
+
+if (!defined('L5_SWAGGER_SERVER_DESCRIPTION')) {
+    define('L5_SWAGGER_SERVER_DESCRIPTION', env('APP_ENV') === 'production' ? 'Production API Server' : 'Development API Server');
+}
 #[
     OA\Info(
         version: "1.0.0",
@@ -16,7 +20,7 @@ if (!defined('L5_SWAGGER_CONST_HOST')) {
     ),
     OA\Server(
         url: L5_SWAGGER_CONST_HOST,
-        description: "Local API Server"
+        description: L5_SWAGGER_SERVER_DESCRIPTION
     ),
     OA\SecurityScheme(
         securityScheme: "bearerAuth",

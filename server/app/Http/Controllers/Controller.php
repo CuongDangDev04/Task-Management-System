@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use OpenApi\Attributes as OA;
 if (!defined('L5_SWAGGER_CONST_HOST')) {
-    define('L5_SWAGGER_CONST_HOST', env('L5_SWAGGER_CONST_HOST', 'http://localhost:8000/api'));
+    $appUrl = env('APP_URL', 'http://localhost:8000');
+    define('L5_SWAGGER_CONST_HOST', rtrim($appUrl, '/') . '/api');
 }
 #[
     OA\Info(

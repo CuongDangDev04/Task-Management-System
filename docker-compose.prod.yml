@@ -32,6 +32,7 @@ services:
       APP_KEY: ${APP_KEY}
       APP_DEBUG: false
       APP_URL: https://api.blueskydev04.id.vn
+      L5_SWAGGER_CONST_HOST: https://api.blueskydev04.id.vn/api
       DB_CONNECTION: mysql
       DB_HOST: mysql
       DB_PORT: 3306

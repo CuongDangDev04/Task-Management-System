@@ -6,6 +6,7 @@ import type { TaskBoardProps, TaskCardProps, TaskColumnProps } from '@/modules/t
 function TaskCard({
   task,
   onEdit,
+  onView,
   onDelete,
   onStatusChange,
   statusLabelMap,
@@ -31,7 +32,10 @@ function TaskCard({
       }`}
     >
       <div className="mb-2 flex items-start justify-between gap-2">
-        <h4 className="font-semibold text-gray-800 text-sm">{task.title}</h4>
+        <button type="button" onClick={() => onView(task)} className="text-left font-semibold text-gray-800 text-sm hover:text-blue-600">
+          {task.title}
+        </button>
+
         <button
           type="button"
           onClick={() => onEdit(task)}
@@ -61,6 +65,14 @@ function TaskCard({
 
         <button
           type="button"
+          onClick={() => onView(task)}
+          className="text-xs text-slate-500 hover:text-slate-700"
+        >
+          Xem
+        </button>
+
+        <button
+          type="button"
           onClick={() => onDelete(task)}
           className="text-xs text-red-500 hover:text-red-700"
         >
@@ -77,6 +89,7 @@ function TaskColumn({
   currentPage,
   totalPages,
   onEdit,
+  onView,
   onDelete,
   onStatusChange,
   onChangePage,
@@ -110,6 +123,7 @@ function TaskColumn({
               key={task.id}
               task={task}
               onEdit={onEdit}
+              onView={onView}
               onDelete={onDelete}
               onStatusChange={onStatusChange}
               statusLabelMap={statusLabelMap}
@@ -155,6 +169,7 @@ export const TaskBoard = ({
   currentPageByStatus,
   totalPagesByStatus,
   onEdit,
+  onView,
   onDelete,
   onStatusChange,
   onDropTask,
@@ -193,6 +208,7 @@ export const TaskBoard = ({
               currentPage={currentPageByStatus[column.key] ?? 1}
               totalPages={totalPagesByStatus[column.key] ?? 1}
               onEdit={onEdit}
+              onView={onView}
               onDelete={onDelete}
               onStatusChange={onStatusChange}
               onChangePage={(value) => setCurrentPageByStatus(column.key, value)}

@@ -5,10 +5,12 @@ import { ProtectedRoute, GuestRoute } from './RouteGuards';
 import type { AppRoute } from '@/types/routesType';
 import { authRoutes } from '@/modules/auth/routes';
 import { taskRoutes } from '@/modules/tasks/routes';
+import { userRoutes } from '@/modules/users/routes';
 // 1. Mảng tổng hợp toàn bộ routes của toàn hệ thống
 export const appRoutesConfig: AppRoute[] = [
   ...authRoutes,
-  ...taskRoutes
+  ...taskRoutes,
+  ...userRoutes,
 ];
 
 interface AppRoutesProps {
@@ -37,7 +39,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ isAuthenticated }) => {
       </Route>
 
       {/* 3. Redirect mặc định và 404 */}
-      <Route path="/" element={<Navigate to="/tasks" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<div className="p-8 text-center text-gray-500">404 - Trang không tồn tại</div>} />
     </Routes>
   );

@@ -15,6 +15,7 @@ export interface TaskBoardProps {
   totalPagesByStatus: Record<Task['status'], number>;
   pageSize: number;
   onEdit: (task: Task) => void;
+  onView: (task: Task) => void;
   onDelete: (task: Task) => void;
   onStatusChange: (task: Task, status: Task['status']) => void;
   onDropTask: (taskId: number, status: Task['status']) => void;
@@ -26,6 +27,7 @@ export interface TaskBoardProps {
 export interface TaskCardProps {
   task: Task;
   onEdit: (task: Task) => void;
+  onView: (task: Task) => void;
   onDelete: (task: Task) => void;
   onStatusChange: (task: Task, status: Task['status']) => void;
   statusLabelMap: Record<Task['status'], string>;
@@ -38,6 +40,7 @@ export interface TaskColumnProps {
   currentPage: number;
   totalPages: number;
   onEdit: (task: Task) => void;
+  onView: (task: Task) => void;
   onDelete: (task: Task) => void;
   onStatusChange: (task: Task, status: Task['status']) => void;
   onChangePage: (value: number | ((prev: number) => number)) => void;

@@ -41,10 +41,16 @@ type DeadlineItemCardProps = {
   badgeText: string;
   badgeClass: string;
   priorityClass: string;
+  priorityLabel: string;
+  onView?: (task: Task) => void;
 };
 
-const DeadlineItemCard = ({ task, badgeText, badgeClass, priorityClass }: DeadlineItemCardProps) => (
-  <div className="rounded-lg border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-3 shadow-sm">
+const DeadlineItemCard = ({ task, badgeText, badgeClass, priorityClass, priorityLabel, onView }: DeadlineItemCardProps) => (
+  <button
+    type="button"
+    onClick={() => onView?.(task)}
+    className="w-full rounded-lg border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-3 text-left shadow-sm transition hover:border-sky-200 hover:bg-sky-50/30"
+  >
     <div className="mb-1.5 flex items-start justify-between gap-2">
       <p className="line-clamp-2 text-sm font-semibold text-gray-800">{task.title}</p>
       <span className={`rounded-full border bg-white px-1.5 py-0.5 text-[9px] font-medium ${badgeClass}`}>
@@ -54,11 +60,11 @@ const DeadlineItemCard = ({ task, badgeText, badgeClass, priorityClass }: Deadli
 
     <div className="flex items-center justify-between gap-2 text-[11px] text-gray-600">
       <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 ${priorityClass}`}>
-        {task.priority}
+        {priorityLabel}
       </span>
       <span>Hạn: {task.due_date}</span>
     </div>
-  </div>
+  </button>
 );
 
 type DeadlinePanelProps = {
@@ -78,6 +84,8 @@ type DeadlinePanelProps = {
   countClass: string;
   emptyClass: string;
   borderClass: string;
+  priorityLabelMap: Record<Task['priority'], string>;
+  onView?: (task: Task) => void;
 };
 
 const DeadlinePanel = ({
@@ -97,6 +105,8 @@ const DeadlinePanel = ({
   countClass,
   emptyClass,
   borderClass,
+  priorityLabelMap,
+  onView,
 }: DeadlinePanelProps) => (
   <div className={`rounded-2xl border bg-white p-4 shadow-sm ${panelClass}`}>
     <div className="mb-3 flex items-center justify-between">
@@ -118,6 +128,8 @@ const DeadlinePanel = ({
               badgeText={badgeText}
               badgeClass={badgeClass}
               priorityClass={priorityClass}
+              priorityLabel={priorityLabelMap[task.priority]}
+              onView={onView}
             />
           ))}
         </div>
@@ -144,6 +156,8 @@ type TaskDeadlineSectionProps = {
   setOverduePage: (value: number | ((prev: number) => number)) => void;
   setUpcomingPage: (value: number | ((prev: number) => number)) => void;
   statusLabelMap: Record<Task['status'], string>;
+  priorityLabelMap: Record<Task['priority'], string>;
+  onTaskView?: (task: Task) => void;
 };
 
 export const TaskDeadlineSection = ({
@@ -156,6 +170,8 @@ export const TaskDeadlineSection = ({
   setOverduePage,
   setUpcomingPage,
   statusLabelMap,
+  priorityLabelMap,
+  onTaskView,
 }: TaskDeadlineSectionProps) => {
   return (
     <section className="grid gap-6 xl:grid-cols-2">
@@ -176,6 +192,8 @@ export const TaskDeadlineSection = ({
         countClass="bg-red-100 text-red-700"
         emptyClass="border-red-200 bg-red-50"
         borderClass="border-red-200 text-red-700"
+        priorityLabelMap={priorityLabelMap}
+        onView={onTaskView}
       />
 
       <DeadlinePanel
@@ -195,6 +213,8 @@ export const TaskDeadlineSection = ({
         countClass="bg-orange-100 text-orange-700"
         emptyClass="border-orange-200 bg-orange-50"
         borderClass="border-orange-200 text-orange-700"
+        priorityLabelMap={priorityLabelMap}
+        onView={onTaskView}
       />
     </section>
   );

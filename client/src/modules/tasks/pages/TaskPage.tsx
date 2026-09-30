@@ -1,35 +1,27 @@
 import { TaskBoard } from '@/modules/tasks/components/TaskBoard';
-import { TaskDeadlineSection } from '@/modules/tasks/components/TaskDeadlineSection';
+import { TaskDetailModal } from '@/modules/tasks/components/TaskDetailModal';
 import { TaskFilterSection } from '@/modules/tasks/components/TaskFilterSection';
-import { TaskHeader } from '@/modules/tasks/components/TaskHeader';
-import { TaskSummarySection } from '@/modules/tasks/components/TaskSummarySection';
 import {
   columns,
   priorityLabelMap,
   statusLabelMap,
   useTaskBoardActions,
-  useTaskDeadlineState,
-  useTaskSummary,
 } from '@/modules/tasks/hooks/useTaskBoard';
 import { useTaskData } from '@/modules/tasks/hooks/useTaskData';
 import { useTaskFilters } from '@/modules/tasks/hooks/useTaskFilters';
 import { useTaskModal } from '@/modules/tasks/hooks/useTaskModal';
 import type { Task } from '@/modules/tasks/types/taskType';
 import { TaskModal } from '@/modules/tasks/components/TaskModal';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { useState } from 'react';
 
 export default function TaskPage() {
-  const { user, logout } = useAuthStore();
-
   const taskData = useTaskData();
   const modal = useTaskModal();
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const filters = useTaskFilters(taskData.tasks);
-  const summary = useTaskSummary(taskData.tasks);
-  const deadline = useTaskDeadlineState(taskData.tasks);
   const boardActions = useTaskBoardActions(taskData, modal, filters);
 
   const {
-    tasks,
     loading,
     submitting,
     error,
@@ -46,7 +38,6 @@ export default function TaskPage() {
     isTaskModalOpen,
     pageSize,
   } = {
-    tasks: taskData.tasks,
     loading: taskData.loading,
     submitting: taskData.submitting,
     error: taskData.error,
@@ -63,19 +54,6 @@ export default function TaskPage() {
     isTaskModalOpen: modal.isTaskModalOpen,
     pageSize: filters.pageSize,
   };
-
-  const { todoCount, inProgressCount, completedCount } = summary;
-
-  const {
-    upcomingPage,
-    overduePage,
-    upcomingTotalPages,
-    overdueTotalPages,
-    paginatedUpcomingTasks,
-    paginatedOverdueTasks,
-    setUpcomingPage,
-    setOverduePage,
-  } = deadline;
 
   const { handleCreateOrUpdate, handleDelete, handleStatusChange, handleDropTask } = boardActions;
 
@@ -104,72 +82,52 @@ export default function TaskPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <TaskHeader userName={user?.name} onLogout={logout} />
+    <>
+      <TaskModal
+        isOpen={isTaskModalOpen}
+        editingTask={editingTask}
+        error={error}
+        submitting={submitting}
+        onClose={closeTaskModal}
+        onSubmit={handleCreateOrUpdate}
+      />
 
-      <main className="mx-auto max-w-6xl space-y-6 p-6">
-        <TaskSummarySection
-          tasksCount={tasks.length}
-          todoCount={todoCount}
-          inProgressCount={inProgressCount}
-          completedCount={completedCount}
-        />
+      <TaskDetailModal isOpen={!!selectedTask} task={selectedTask} onClose={() => setSelectedTask(null)} />
 
-        <TaskDeadlineSection
-          overdueTasks={paginatedOverdueTasks}
-          upcomingTasks={paginatedUpcomingTasks}
-          overduePage={overduePage}
-          upcomingPage={upcomingPage}
-          overdueTotalPages={overdueTotalPages}
-          upcomingTotalPages={upcomingTotalPages}
-          setOverduePage={setOverduePage}
-          setUpcomingPage={setUpcomingPage}
-          statusLabelMap={statusLabelMap}
-        />
-
-        <TaskModal
-          isOpen={isTaskModalOpen}
-          editingTask={editingTask}
-          error={error}
-          submitting={submitting}
-          onClose={closeTaskModal}
-          onSubmit={handleCreateOrUpdate}
-        />
-
-        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-          <div className="border-b border-gray-200">
-            <TaskFilterSection
-              searchTerm={searchTerm}
-              statusFilter={statusFilter}
-              priorityFilter={priorityFilter}
-              filteredTasksCount={filteredTasks.length}
-              onSearchChange={handleSearchChange}
-              onStatusChange={handleStatusFilterChange}
-              onPriorityChange={handlePriorityFilterChange}
-              onOpenCreateModal={openCreateTaskModal}
-            />
-          </div>
-
-          <div className="p-5 pt-0">
-            <TaskBoard
-              columns={columns}
-              paginatedTasksByStatus={paginatedTasksByStatus}
-              loading={loading}
-              filteredTasks={filteredTasks}
-              currentPageByStatus={currentPageByStatus}
-              totalPagesByStatus={totalPagesByStatus}
-              pageSize={pageSize}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onStatusChange={handleStatusChange}
-              onDropTask={handleDropTask}
-              statusLabelMap={statusLabelMap}
-              priorityLabelMap={priorityLabelMap}
-              setCurrentPageByStatus={setCurrentPageByStatus}
-            />
-          </div>
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200">
+          <TaskFilterSection
+            searchTerm={searchTerm}
+            statusFilter={statusFilter}
+            priorityFilter={priorityFilter}
+            filteredTasksCount={filteredTasks.length}
+            onSearchChange={handleSearchChange}
+            onStatusChange={handleStatusFilterChange}
+            onPriorityChange={handlePriorityFilterChange}
+            onOpenCreateModal={openCreateTaskModal}
+          />
         </div>
-      </main>
-    </div>
+
+        <div className="p-5 pt-0">
+          <TaskBoard
+            columns={columns}
+            paginatedTasksByStatus={paginatedTasksByStatus}
+            loading={loading}
+            filteredTasks={filteredTasks}
+            currentPageByStatus={currentPageByStatus}
+            totalPagesByStatus={totalPagesByStatus}
+            pageSize={pageSize}
+            onEdit={handleEdit}
+            onView={setSelectedTask}
+            onDelete={handleDelete}
+            onStatusChange={handleStatusChange}
+            onDropTask={handleDropTask}
+            statusLabelMap={statusLabelMap}
+            priorityLabelMap={priorityLabelMap}
+            setCurrentPageByStatus={setCurrentPageByStatus}
+          />
+        </div>
+      </div>
+    </>
   );
 }

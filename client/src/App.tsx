@@ -1,18 +1,16 @@
-// src/App.tsx
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { useAuthStore } from './stores/useAuthStore';
+import { AppLayout } from './components/layout/AppLayout';
 import { AppRoutes } from './routes/AppRoutes';
+import { useAuthStore } from './stores/useAuthStore';
 
 export default function App() {
-  const { isAuthenticated, isLoading, checkAuth } = useAuthStore();
+  const { user, logout, isAuthenticated, isLoading, checkAuth } = useAuthStore();
 
-  // Kiểm tra cookie session của Sanctum ngay khi ứng dụng khởi động
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // Màn hình chờ trong lúc kiểm tra Cookie session
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -24,9 +22,17 @@ export default function App() {
     );
   }
 
+  const routes = <AppRoutes isAuthenticated={isAuthenticated} />;
+
   return (
     <BrowserRouter>
-      <AppRoutes isAuthenticated={isAuthenticated} />
+      {isAuthenticated ? (
+        <AppLayout userName={user?.name} onLogout={logout} tasksCount={0}>
+          {routes}
+        </AppLayout>
+      ) : (
+        routes
+      )}
     </BrowserRouter>
   );
 }

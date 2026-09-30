@@ -1,58 +1,199 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kiến trúc Backend (Server)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Tổng quan
 
-## About Laravel
+Backend của dự án là một API Laravel, chịu trách nhiệm:
+- xác thực người dùng bằng Sanctum
+- quản lý task theo user
+- validate dữ liệu đầu vào
+- chuẩn hóa response trả về client
+- cung cấp tài liệu API bằng Swagger/L5-Swagger
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Kiến trúc hiện tại theo mô hình phân lớp rõ ràng:
+- Route -> Controller -> Service -> Repository -> Model/Database
+- Response được chuẩn hóa bằng Resource
+- Validation được tách riêng trong Request
+- Business logic không nằm trực tiếp trong Controller
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Cấu trúc thư mục
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```text
+server/
+├── app/
+│   ├── Docs/
+│   │   ├── AuthDoc.php
+│   │   └── TaskDoc.php
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php
+│   │   │   ├── TaskController.php
+│   │   │   └── SystemController.php
+│   │   ├── Requests/
+│   │   │   ├── LoginRequest.php
+│   │   │   ├── RegisterRequest.php
+│   │   │   ├── StoreTaskRequest.php
+│   │   │   └── UpdateTaskRequest.php
+│   │   └── Resources/
+│   │       ├── TaskResource.php
+│   │       └── UserResource.php
+│   ├── Models/
+│   │   ├── Task.php
+│   │   └── User.php
+│   ├── Providers/
+│   │   └── AppServiceProvider.php
+│   ├── Repositories/
+│   │   ├── TaskRepository.php
+│   │   └── UserRepository.php
+│   └── Services/
+│       ├── AuthService.php
+│       └── TaskService.php
+├── routes/
+│   ├── api.php
+│   ├── console.php
+│   └── web.php
+├── config/
+│   ├── l5-swagger.php
+│   └── sanctum.php
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+├── tests/
+├── artisan
+├── composer.json
+├── phpunit.xml
+└── README.md
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## 3. Lớp phía API
 
-## Contributing
+### 3.1 Route layer
+File:
+- `routes/api.php`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Router định nghĩa các endpoint chính:
+- `GET /api/health-check`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/user`
+- `POST /api/auth/logout`
+- `GET /api/tasks`, `POST /api/tasks`, `PUT/PATCH /api/tasks/{id}`, `DELETE /api/tasks/{id}`
 
-## Code of Conduct
+Một số endpoint được đặt trong `auth:sanctum` middleware để bắt buộc người dùng đã login trước khi gọi.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3.2 Controller layer
+File:
+- `app/Http/Controllers/AuthController.php`
+- `app/Http/Controllers/TaskController.php`
 
-## Security Vulnerabilities
+Controller có trách nhiệm:
+- nhận HTTP request
+- validate request thông qua `Request` object
+- gọi Service
+- trả response hoặc `JsonResponse`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Controller không nên chứa logic nghiệp vụ phức tạp hay thao tác database trực tiếp.
 
-## License
+### 3.3 Service layer
+File:
+- `app/Services/AuthService.php`
+- `app/Services/TaskService.php`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Service chứa business logic, ví dụ:
+- đăng ký user
+- đăng nhập, logout
+- kiểm tra quyền sở hữu task
+- thao tác workflow nghiệp vụ
+
+Ví dụ trong `TaskService`:
+- `getTasksForUser()` lấy công việc của user hiện tại
+- `createTask()` tạo task mới với `user_id`
+- `updateTask()` và `deleteTask()` kiểm tra `authorizeTaskAccess()` trước khi cập nhật/xoá
+
+### 3.4 Repository layer
+File:
+- `app/Repositories/UserRepository.php`
+- `app/Repositories/TaskRepository.php`
+
+Repository đóng vai trò trung gian giữa Service và database:
+- truy vấn Eloquent
+- tạo mới bản ghi
+- cập nhật/xoá
+- truy vấn theo user
+
+Đây là nơi tập trung logic CRUD, giúp Service không phụ thuộc trực tiếp vào cấu trúc query của database.
+
+### 3.5 Model layer
+File:
+- `app/Models/User.php`
+- `app/Models/Task.php`
+
+Model đại diện cho bảng dữ liệu và quan hệ Eloquent.
+- `User` liên kết với các task và session auth
+- `Task` lưu thông tin task với `user_id`, trạng thái, tiêu đề, mức ưu tiên, deadline, ...
+
+## 4. Validation và response format
+
+### 4.1 Request validation
+File:
+- `app/Http/Requests/*.php`
+
+Mỗi request riêng cho từng endpoint:
+- `RegisterRequest`, `LoginRequest`
+- `StoreTaskRequest`, `UpdateTaskRequest`
+
+Tác dụng:
+- kiểm tra dữ liệu đầu vào
+- chuẩn hóa lỗi validation
+- giảm rủi ro dữ liệu sai từ client
+
+### 4.2 Resource response
+File:
+- `app/Http/Resources/UserResource.php`
+- `app/Http/Resources/TaskResource.php`
+
+Resource dùng để format response trước khi trả cho client, giúp:
+- ẩn các trường nhạy cảm
+- chuẩn hóa dữ liệu
+- giữ API contract rõ ràng
+
+## 5. Xác thực và bảo mật
+
+### 5.1 Sanctum + cookie auth
+Dự án dùng Laravel Sanctum với cookie-based authentication.
+
+Các điểm chính:
+- Route public auth: `/api/auth/login`, `/api/auth/register`
+- Route protected: `auth:sanctum` middleware
+- Client gửi cookie kèm request, nên cần bật `withCredentials: true`
+- CSRF cookie được lấy trước khi thực hiện login/register
+
+### 5.2 Quyền truy cập dữ liệu
+`TaskService` kiểm tra quyền sở hữu công việc trước khi update/delete/show.
+
+Mỗi thao tác liên quan task đều validate `task->user_id === auth user id` để tránh users truy cập nhầm dữ liệu của người khác.
+
+## 6. Swagger / API docs
+
+File tài liệu API:
+- `app/Docs/AuthDoc.php`
+- `app/Docs/TaskDoc.php`
+
+Swagger được cấu hình qua:
+- `config/l5-swagger.php`
+
+Tài liệu API có thể xem tại:
+- `http://localhost:8000/api/documentation`
+
+
+## 7. Nguyên tắc thiết kế
+
+- Controller chỉ tập trung xử lý HTTP
+- Business logic đặt trong Service
+- Database logic đặt trong Repository
+- Dữ liệu đầu vào được validate ở Request
+- Response được định dạng rõ ràng qua Resource
+- Mỗi user chỉ có quyền truy cập task của chính mình
+- API được tài liệu hóa qua Swagger để dễ test và 유지 sau này
+

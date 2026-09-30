@@ -2,11 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboardList, faTableList, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
 
-type TaskSidebarProps = {
-  tasksCount: number;
-};
 
-export const AppSidebar = ({ tasksCount }: TaskSidebarProps) => {
+
+export const AppSidebar = () => {
   const location = useLocation();
 
   const sidebarItems = [

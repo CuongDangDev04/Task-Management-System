@@ -27,7 +27,7 @@ export default function App() {
   return (
     <BrowserRouter>
       {isAuthenticated ? (
-        <AppLayout userName={user?.name} onLogout={logout} tasksCount={0}>
+        <AppLayout userName={user?.name} onLogout={logout} >
           {routes}
         </AppLayout>
       ) : (
